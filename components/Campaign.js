@@ -7,7 +7,7 @@ import Typography from "@mui/material/Typography";
 
 const Campaign = (props) => {
   return (
-    <Card sx={{ minWidth: 275 }}>
+    <Card sx={{ minWidth: 275 }} style={{display: "flex"}}>
       <CardContent>
         <Typography variant="h5" component="div">
           {props.title}
@@ -15,7 +15,7 @@ const Campaign = (props) => {
         <Typography variant="body2">{props.address}</Typography>
       </CardContent>
       <CardActions>
-        <Button size="small" variant="outlined" color="success">{props.buttonText}</Button>
+        <Button size="small" variant="outlined" color="secondary">{props.buttonText}</Button>
       </CardActions>
     </Card>
   );

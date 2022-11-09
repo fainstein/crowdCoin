@@ -1,22 +1,15 @@
 import React from "react";
 import Header from "./Header";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
-
-const darkTheme = createTheme({
-  palette: {
-    mode: "dark",
-    primary: {
-      main: "#1976d2",
-    },
-  },
-});
+import { Box } from "@mui/system";
+import { Toolbar } from "@mui/material";
 
 const Layout = ({ children }) => {
   return (
-    <ThemeProvider theme={darkTheme}>
-      <Header />
-      {children}
-    </ThemeProvider>
+      <Box component="main" sx={{ p: 3 }}>
+        <Header />
+        <Toolbar />
+        {children}
+      </Box>
   );
 };
 

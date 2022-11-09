@@ -6,7 +6,8 @@ let web3;
 // Also, we'll check if metamask has already injected web3 onto the browser.
 if (typeof window !== "undefined" && typeof window.web3 !== "undefined") {
   // We are in the browser and Metamask is running.
-  web3 = new Web3(window.currentProvider); // Remember. Here we use our own copy of web3
+  window.ethereum.request({ method: "eth_requestAccounts" }); // I've added this (NF)
+  web3 = new Web3(window.ethereum); // Remember. Here we use our own copy of web3
   // To ensure the version we are handling. In other case, metamask could use a different
   // version.
 } else {
