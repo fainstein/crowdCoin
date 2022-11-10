@@ -14,6 +14,7 @@ import LoadingButton from "@mui/lab/LoadingButton";
 
 import Layout from "../../components/Layout";
 import web3 from "../../ethereum/web3";
+import campaign from "../../ethereum/campaign";
 
 const CampaignShow = ({ campaignMetrics }) => {
   return (
@@ -23,32 +24,21 @@ const CampaignShow = ({ campaignMetrics }) => {
           <Typography variant="h3" gutterBottom component="div">
             Campaign Details
           </Typography>
-          {campaignMetrics.map((metric, i) => {
-            return (
-              <Grid
-                item
-                xs={12}
-                md={6}
-                container
-                justifyContent="center"
-                key={i}
+          {campaignMetrics.map((metric, i) => (
+            <Grid item xs={12} md={6} container justifyContent="center" key={i}>
+              <Card
+                sx={{ minWidth: 200, width: "90%" }}
+                style={{ display: "flex", margin: "10px" }}
               >
-                <Card
-                  sx={{ minWidth: 200, width: "90%" }}
-                  style={{ display: "flex", margin: "10px" }}
-                >
-                  <CardContent>
-                    <Typography variant="h5" component="div">
-                      {metric.kpi}
-                    </Typography>
-                    <Typography variant="body2">
-                      {metric.description}
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </Grid>
-            );
-          })}
+                <CardContent>
+                  <Typography variant="h5" component="div">
+                    {metric.kpi}
+                  </Typography>
+                  <Typography variant="body2">{metric.description}</Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
           <Button color="primary" variant="contained" fullWidth href={"#"}>
             View Requests
           </Button>
@@ -103,12 +93,16 @@ const CampaignShow = ({ campaignMetrics }) => {
   );
 };
 
-CampaignShow.getInitialProps = async () => {
+CampaignShow.getInitialProps = async (props) => {
+  const campaignInstance = campaign(props.query.campaign);
+  const campaignSummary = await campaignInstance.methods.getSummary().call();
+  campaignSummary[1] = web3.utils.fromWei(campaignSummary[1], "ether");
   let campaignMetrics = [
-    { kpi: 1, description: "Campaign Balance" },
-    { kpi: 100, description: "Minimum Contribution" },
-    { kpi: 100, description: "Requests" },
-    { kpi: 100, description: "Contributors" },
+    { kpi: campaignSummary[0], description: "Minimum Contribution" },
+    { kpi: campaignSummary[1], description: "Campaign Balance (ETH)" },
+    { kpi: campaignSummary[2], description: "Requests" },
+    { kpi: campaignSummary[3], description: "Contributors" },
+    { kpi: campaignSummary[4], description: "Manager Address" },
   ];
   return { campaignMetrics };
 };

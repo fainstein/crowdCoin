@@ -76,7 +76,7 @@ const Header = () => {
           </Typography>
           <Box sx={{ display: { xs: "none", sm: "block" } }}>
             {navItems.map((item) => (
-              <Button key={item} sx={{ color: "#fff" }} href={item.path}>
+              <Button key={item.text} sx={{ color: "#fff" }} href={item.path}>
                 {item.text}
               </Button>
             ))}
