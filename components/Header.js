@@ -12,9 +12,20 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+import { Link } from "@mui/material";
+import { CAMPAIGNS_URL, CREATE_CAMPAIGN_URL } from "../constants/urls";
 
 const drawerWidth = 240;
-const navItems = ["Campaigns", "Create"];
+const navItems = [
+  {
+    text: "Campaigns",
+    path: CAMPAIGNS_URL,
+  },
+  {
+    text: "Create",
+    path: CREATE_CAMPAIGN_URL,
+  },
+];
 
 const Header = () => {
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -31,9 +42,11 @@ const Header = () => {
       <Divider />
       <List>
         {navItems.map((item) => (
-          <ListItem key={item} disablePadding>
+          <ListItem key={item.text} disablePadding>
             <ListItemButton sx={{ textAlign: "center" }}>
-              <ListItemText primary={item} />
+              <Link href={item.path} underline="hover" color="inherit">
+                <ListItemText primary={item.text} />
+              </Link>
             </ListItemButton>
           </ListItem>
         ))}
@@ -63,8 +76,8 @@ const Header = () => {
           </Typography>
           <Box sx={{ display: { xs: "none", sm: "block" } }}>
             {navItems.map((item) => (
-              <Button key={item} sx={{ color: "#fff" }}>
-                {item}
+              <Button key={item} sx={{ color: "#fff" }} href={item.path}>
+                {item.text}
               </Button>
             ))}
           </Box>

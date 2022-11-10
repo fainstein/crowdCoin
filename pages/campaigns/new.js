@@ -13,6 +13,7 @@ import Layout from "../../components/Layout";
 import factory from "../../ethereum/factory";
 import web3 from "../../ethereum/web3";
 
+
 const CampaignNew = () => {
   const [minContrib, setMinContrib] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(false);

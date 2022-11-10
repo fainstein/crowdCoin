@@ -2,6 +2,7 @@ import { Button, Grid, Typography } from "@mui/material";
 import React from "react";
 import Campaign from "../components/Campaign";
 import Layout from "../components/Layout";
+import { CREATE_CAMPAIGN_URL } from "../constants/urls";
 import factory from "../ethereum/factory";
 
 const CampaignIndex = ({ campaigns }) => {
@@ -26,10 +27,7 @@ const CampaignIndex = ({ campaigns }) => {
           <Button
             color="primary"
             variant="contained"
-            style={{
-              backgroundImage:
-                "linear-gradient(rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.09))",
-            }}
+            href={CREATE_CAMPAIGN_URL}
           >
             Create Campaign
           </Button>
