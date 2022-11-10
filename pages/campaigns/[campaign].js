@@ -107,7 +107,7 @@ CampaignShow.getInitialProps = async () => {
   let campaignMetrics = [
     { kpi: 1, description: "Campaign Balance" },
     { kpi: 100, description: "Minimum Contribution" },
-    { kpi: 100, description: "Pending Requests" },
+    { kpi: 100, description: "Requests" },
     { kpi: 100, description: "Contributors" },
   ];
   return { campaignMetrics };
