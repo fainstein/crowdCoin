@@ -5,6 +5,7 @@ import Layout from "../../components/Layout";
 import web3 from "../../ethereum/web3";
 import campaign from "../../ethereum/campaign";
 import ContributeForm from "../../components/ContributeForm";
+import { CAMPAIGN_REQUESTS_URL } from "../../constants/urls";
 
 const CampaignShow = ({ campaignMetrics, campaignAddress }) => {
   return (
@@ -29,7 +30,12 @@ const CampaignShow = ({ campaignMetrics, campaignAddress }) => {
               </Card>
             </Grid>
           ))}
-          <Button color="primary" variant="contained" fullWidth href={"#"}>
+          <Button
+            color="primary"
+            variant="contained"
+            fullWidth
+            href={CAMPAIGN_REQUESTS_URL(campaignAddress)}
+          >
             View Requests
           </Button>
         </Grid>

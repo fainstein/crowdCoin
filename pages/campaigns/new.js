@@ -12,9 +12,11 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import Layout from "../../components/Layout";
 import factory from "../../ethereum/factory";
 import web3 from "../../ethereum/web3";
-
+import { useRouter } from "next/router";
+import { CAMPAIGNS_URL } from "../../constants/urls";
 
 const CampaignNew = () => {
+  const router = useRouter();
   const [minContrib, setMinContrib] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(false);
   const [error, setError] = React.useState("");
@@ -31,6 +33,9 @@ const CampaignNew = () => {
       setError(err);
     }
     setIsLoading(false);
+    if (!error) {
+      router.push(CAMPAIGNS_URL);
+    }
   };
 
   return (

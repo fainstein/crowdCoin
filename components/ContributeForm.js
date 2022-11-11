@@ -25,13 +25,11 @@ const ContributeForm = ({ address }) => {
     try {
       const accounts = await web3.eth.getAccounts();
       const campaignInstance = campaign(address);
-      await campaignInstance.methods
-        .contribute()
-        .send({
-          from: accounts[0],
-          value: web3.utils.toWei(contribution.toString()),
-        });
-        setContribution("");
+      await campaignInstance.methods.contribute().send({
+        from: accounts[0],
+        value: web3.utils.toWei(contribution.toString()),
+      });
+      setContribution("");
     } catch (err) {
       setError(err);
     }
@@ -55,12 +53,8 @@ const ContributeForm = ({ address }) => {
         <FormControl variant="standard" sx={{ m: 1, mt: 3 }} fullWidth>
           <Input
             type="number"
-            // inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
             value={contribution}
-            onChange={
-              (event) => setContribution(event.target.value)
-              //   !isNaN(event.target.value) && setContribution(+event.target.value)
-            }
+            onChange={(event) => setContribution(event.target.value)}
             endAdornment={<InputAdornment position="end">ether</InputAdornment>}
           />
           <FormHelperText>Your contribution</FormHelperText>
