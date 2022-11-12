@@ -10,8 +10,9 @@ import Layout from "../../../../components/Layout";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { Alert, Button, Grid, Typography } from "@mui/material";
 import campaign from "../../../../ethereum/campaign";
-import { CREATE_REQUEST_URL } from "../../../../constants/urls";
+import { CAMPAIGN_REQUESTS_URL, CREATE_REQUEST_URL } from "../../../../constants/urls";
 import web3 from "../../../../ethereum/web3";
+import { useRouter } from "next/router";
 
 const RequestsIndex = ({ requests, campaignAddress }) => {
   const tableHeaders = [
@@ -24,34 +25,39 @@ const RequestsIndex = ({ requests, campaignAddress }) => {
     "Finalize",
   ];
 
+  const router = useRouter();
   const [isApproveLoading, setIsApproveLoading] = useState(false);
   const [isFinalizeLoading, setIsFinalizeLoading] = useState(false);
   const [error, setError] = useState("");
 
   const approveRequestHandler = async (id) => {
-    const accounts = web3.eth.getAccounts();
-
+    const accounts = await web3.eth.getAccounts();
     setIsApproveLoading(true);
     setError("");
     try {
       const campaignInstance = campaign(campaignAddress);
       await campaignInstance.methods
-        .approveRequest(id.toString())
+        .approveRequest(id)
         .send({ from: accounts[0] });
     } catch (err) {
       setError(err);
     }
     setIsApproveLoading(false);
+
+  if (!error) {
+    router.push(CAMPAIGN_REQUESTS_URL(campaignAddress));
+  }
+
   };
 
   const finalizeRequestHandler = async (id) => {
     const campaignInstance = campaign(campaignAddress);
-    const accounts = web3.eth.getAccounts();
+    const accounts = await web3.eth.getAccounts();
     setIsFinalizeLoading(true);
     setError("");
     try {
       await campaignInstance.methods
-        .finalizeRequest(id)
+        .finalizeRequest(+id)
         .send({ from: accounts[0] });
     } catch (err) {
       setError(err);
@@ -102,16 +108,11 @@ const RequestsIndex = ({ requests, campaignAddress }) => {
                       {row.approvalCount.approversCount}
                     </TableCell>
                     <TableCell align="center">
-                      {console.log(row.approversCount)}
                       {!row.complete && (
                         <LoadingButton
-                          disable={
-                            row.approvalCount <
-                              Math.ceil(row.approversCount / 2) ||
-                            isFinalizeLoading.toString()
-                          }
+                          disabled={isFinalizeLoading}
                           loading={isApproveLoading}
-                          onClick={approveRequestHandler.bind(row.id)}
+                          onClick={approveRequestHandler.bind(null, row.id)}
                           color="success"
                           variant="contained"
                         >
@@ -123,8 +124,12 @@ const RequestsIndex = ({ requests, campaignAddress }) => {
                       {!row.complete && (
                         <LoadingButton
                           loading={isFinalizeLoading}
-                          disable={isApproveLoading.toString()}
-                          onClick={finalizeRequestHandler.bind(row.id)}
+                          disabled={
+                            row.approvalCount.approvalCount <
+                              row.approvalCount.approversCount / 2 ||
+                            isApproveLoading
+                          }
+                          onClick={finalizeRequestHandler.bind(null, row.id)}
                           color="error"
                           variant="contained"
                         >
@@ -148,9 +153,9 @@ const RequestsIndex = ({ requests, campaignAddress }) => {
           </Button>
         </Grid>
       </Grid>
-        <Typography variant="h5" gutterBottom component="div">
-          Found {requests.length} requests
-        </Typography>
+      <Typography variant="h5" gutterBottom component="div">
+        Found {requests.length} requests
+      </Typography>
     </Layout>
   );
 };
