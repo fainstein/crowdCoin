@@ -14,9 +14,9 @@ let campaign;
 beforeEach(async () => {
   accounts = await web3.eth.getAccounts();
   // Deploy an instance of our compileFactory contract
-  factory = await new web3.eth.Contract(JSON.parse(compiledFactory.interface))
-    .deploy({ data: compiledFactory.bytecode })
-    .send({ from: accounts[0], gas: "1000000" });
+  factory = await new web3.eth.Contract(compiledFactory.abi)
+    .deploy({ data: compiledFactory.evm.bytecode.object })
+    .send({ from: accounts[0], gas: "1400000" });
   // We will use factory to make an instance of the campaign and assign it to the campaign variable
   // Also we will get it's address and assign it to campaignAddress
   await factory.methods
@@ -29,10 +29,7 @@ beforeEach(async () => {
   [campaignAddress] = await factory.methods.getDeployedCampaigns().call();
   // This call doesn't deploy the contract, because it has been already deployed. All I need to do
   // is pass the address of the deployed contract (and the ABI obviously);
-  campaign = await new web3.eth.Contract(
-    JSON.parse(compiledCampaign.interface),
-    campaignAddress
-  );
+  campaign = await new web3.eth.Contract(compiledCampaign.abi, campaignAddress);
 });
 
 describe("Campaigns", () => {
